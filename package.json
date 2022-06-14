@@ -6,6 +6,7 @@
   "scripts": {
     "start": "DOTENV_CONFIG_PATH=./.env.local NODE_OPTIONS='-r dotenv/config' webpack serve --mode development",
     "build": "DOTENV_CONFIG_PATH=./.env.prod NODE_OPTIONS='-r dotenv/config' webpack --mode production",
+    "deploy": "cp -R dist docs",
     "format:geojson": "ts-node ./scripts/formatGeolifeAsGeojson.ts limit=1000000 output=./public/geolife-1mv2.geojson",
     "tippecanoe:run": "tippecanoe -f -z12 -o geolife-full-z12.mbtiles -l geolife --drop-densest-as-needed data/geolife-full-v12.geojson",
     "tessella:start": "tessella mbtiles://./public/geolife-full-z12.mbtiles"

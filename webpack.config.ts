@@ -77,9 +77,12 @@ const config = {
       'MAPBOX_ACCESS_TOKEN': process.env.MAPBOX_ACCESS_TOKEN,
     }),
     new CopyWebpackPlugin({
-      patterns: [
-        { from: 'public', to: 'dist' }
-      ],
+      patterns: [{ 
+        from: 'public', 
+        globOptions: {
+          ignore: ["**/index.html"],
+        },
+      }],
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname,'public/index.html')

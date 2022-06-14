@@ -19,15 +19,18 @@ root.render((
 ));
 
 if ('serviceWorker' in navigator) {
-  console.log('Service workers allowed')
-  navigator.serviceWorker.register("service-worker.js")
-    .then(() => {
-      console.log('Service worker registered')
-      navigator.serviceWorker.onmessage = (e) => {
-        console.log(e)
-      };
-    })
-    .catch((error) => console.error(error));
+  console.log('Service workers are allowed');
+  window.addEventListener('load', async () => {
+    await navigator.serviceWorker.ready;
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => {
+        console.log('Service worker was registered')
+        navigator.serviceWorker.onmessage = (e) => {
+          console.log(e)
+        };
+      })
+      .catch((error) => console.error(error));
+  });
 } else {
-  console.error('Service workers unsupported')
+  console.error('Service workers are unsupported');
 }
