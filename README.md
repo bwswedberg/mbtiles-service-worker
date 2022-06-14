@@ -1,3 +1,12 @@
-## Setup
-1. [Setup Webpack And Babel for a React JS Application](https://dev.to/shivampawar/setup-webpack-and-babel-for-a-react-js-application-24f5)
-2. [Setup React Application using Typescript and Webpack](https://dev.to/shivampawar/setup-react-application-using-typescript-and-webpack-2kn6)
+# Demo
+
+## MBTile Service Worker (~17m points)
+Serves vector tiles from mbtiles by intercepting http traffic with service worker.
+- ~50mb for "full" data set (dense points were dropped)
+- created with tippecanoe `--drop-densest-as-needed`
+- Can be further optimized by dialing in tippecanoe config
+
+## GeoJSON Cluster Source (1m & 500k points)
+Create a geojson cluster source
+- 13mb (~9mb gzip)
+- Can be further optimized with via map `source` and `layer` config
