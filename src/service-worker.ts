@@ -8,12 +8,13 @@ import { headers as getHeaders } from '@mapbox/tiletype';
 
 declare const self: ServiceWorkerGlobalScope;
 
-let _sql: SqlJsStatic;
-const _dbs: Record<string, SqlJsDatabase> = {};
+let _sql: Promise<SqlJsStatic>;
+const _dbs: Record<string, Promise<SqlJsDatabase>> = {};
 
-const getSql = async () => {
+const getSql = () => {
   if (!_sql) {
-    _sql = await initSqlJs({
+    console.log('service worker: init sql')
+    _sql = initSqlJs({
       // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
       // You can omit locateFile completely when running in node
       locateFile: () => sqlJsWasmUrl
@@ -22,11 +23,18 @@ const getSql = async () => {
   return _sql;
 }
 
-const getDb = async (name: string) => {
+const getDb = (name: string) => {
   if (!_dbs[name]) {
-    const sql = await getSql();
-    const data = await fetch(name).then(res => res.arrayBuffer());
-    _dbs[name] = new sql.Database(new Uint8Array(data));
+    _dbs[name] = new Promise(async (resolve, reject) => {
+      try {
+        const sql = await getSql();
+        const data = await fetch(name).then(res => res.arrayBuffer());
+        console.log(`service worker: init db ${name}`)
+        resolve(new sql.Database(new Uint8Array(data)));
+      } catch (error) {
+        reject(error);
+      }
+    })
   }
   return _dbs[name];
 };
@@ -83,7 +91,7 @@ self.addEventListener('install', () => {
 
 self.addEventListener('activate', () => {
   console.log('service worker: activate');
-  // return self.clients.claim();
+  return self.clients.claim();
 });
 
 const mbtilesUrlExp = /\.mbtiles/;

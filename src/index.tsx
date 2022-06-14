@@ -20,8 +20,7 @@ root.render((
 
 if ('serviceWorker' in navigator) {
   console.log('Service workers are allowed');
-  window.addEventListener('load', async () => {
-    await navigator.serviceWorker.ready;
+  window.addEventListener('load', () => {
     navigator.serviceWorker.register("service-worker.js")
       .then(() => {
         console.log('Service worker was registered')
